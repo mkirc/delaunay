@@ -1,7 +1,7 @@
 
 class Vertex:
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=None, y=None):
 
         self.pos = [x, y]
         self.x = x
