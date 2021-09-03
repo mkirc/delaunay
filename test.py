@@ -7,10 +7,8 @@ v1 = Vertex(x=0, y=0)
 v2 = Vertex(x=1, y=0)
 v3 = Vertex(x=0, y=1)
 
-a = makeEdge(v1, v2)
-b = makeEdge(v3, v1)
-
-print(a, b)
+a = QuadEdge(v1, v2)
+b = QuadEdge(v3, v1)
 
 splice(a.sym(), b)
 
@@ -26,4 +24,7 @@ else:
     print('points are colinear')
     
 
-print(a.lnext())
+print(a, b)
+print([e.nextEdge() for e in a.edges])
+print([e.nextEdge() for e in b.edges])
+print(a.onext(), a.onext().onext(), a.onext().onext().onext())

@@ -4,129 +4,119 @@ from classes.point import Vertex
 
 random.seed(123123)
 
-class QuadEdge:
-    """
-    self.slots contains fields 'data' (eg. Vertex, Face) and 'next'-Edge,
-    ordered ccw'ly around the respective Vertex or Face. Its a list,
-    which can be rotated, inversly rotated via the methods self.rot(),
-    self.invrot(), which actually rotates the list thrice, but since the
-    short len this is faster [citation needed] than building a deque.
-    See Guibas & Stolfi.
-    """
+class Edge:
 
-    def __init__(self, org=Vertex(), dest=Vertex()):
+    def __init__(self, parent, org=Vertex(), dest=Vertex(), symnext=False):
 
-        self.slots = [
-                        [org, None],
-                        [None, None],
-                        [dest, None],
-                        [None, None]
-                     ]
+        self.data = {'org': org, 'dest': dest}
+        self.next = None
+        self.parent = parent
+        self.symnext = symnext
 
-        # convenience attrs
-        self.org = self.slots[0][0]
-        self.dest = self.slots[2][0]
-        self.id = random.randrange(0, 1000)
-
-    def __getitem__(self, idx):
-
-        return self.slots[idx]
-
-    def __setitem__(self, idx, val):
-
-        self.slots[idx] = val
-
-    def __repr__(self):
-
-        return 'Edge-%s <%s,%s>' % (self.id, self.org, self.dest)
+        self.id = random.randrange(0, 1e4)
 
     def __str__(self):
 
-        return 'Edge-%s <%s,%s>' % (self.id, self.org, self.dest)
+        return f'Edge-{self.id}'
 
-    def onext(self):
+    def __repr__(self):
 
-        return self.slots[0][1]
+        return f'Edge-{self.id}_{self.data}'
+
+    def nextEdge(self):
+
+        if not self.symnext:
+            return self.next
+        else:
+            return self.parent.sym()
+
+
+
+class QuadEdge:
+
+    def __init__(self, org, dest):
+
+        self.ptr = 0
+        self.edges = self.makeEdges(org, dest)
+
+        self.org = org
+        self.dest = dest
+        self.id = random.randrange(0, 1e4)
+
+
+    def __str__(self):
+
+        return f'QuadEdge-{self.id}'
+
+    def __repr__(self):
+
+        return f'QuadEdge-{self.id}'
+
+    def __getitem__(self, idx):
+
+        return self.edges[idx]
+
+    def __setitem__(self, idx, val):
+
+        self.edges[idx] = val
 
     def rot(self):
 
-        self.slots.append(self.slots.pop(0))
+        self.ptr = (self.ptr + 1) % 4
+        # return self.edges.append(self.edges.pop(0))
+
+        return self
+
+    def invrot(self):
+
+        self.ptr = (self.ptr + 3) % 4
 
         return self
 
     def sym(self):
 
-        return self.rot().rot()
+        self.ptr = (self.ptr + 2) % 4
 
-    def invrot(self):
+        return self
 
-        return self.rot().rot().rot()
+    def onext(self):
 
-    def oprev(self):
-
-        return self.rot().onext().rot()
+        return self.edges[self.ptr].nextEdge()
 
     def lnext(self):
 
         return self.invrot().onext().rot()
 
-    def lprev(self):
 
-        return self.onext().sym()
+    def makeEdges(self, org, dest):
 
-    def rnext(self):
+        tmp = Edge(self, symnext=True)
+        ret = [Edge(self, org, dest)]
+        ret[0].next = self
+        ret += [tmp]
+        ret += [Edge(self, dest, org, symnext=True)]
+        ret += [tmp]
 
-        return self.rot().onext().invrot()
-
-    def rprev(self):
-
-        return self.sym().onext()
-
-    def dnext(self):
-
-        return self.sym().onext().sym()
-
-    def dprev(self):
-
-        return self.invrot().onext().invrot()
-
-    def rightOf(self, pos):
-
-        """Returns True if given Coordinate is right of the Edge"""
-
-        dx, dy = self.dest.pos
-        ox, oy = self.org.pos
-        px, py = pos
-        return ((dx - px) * (dy - py)) - ((ox - px) * (oy - py))  < 0
-
-    def leftOf(self, pos):
-
-        """Returns True if given Coordinate is left of the Edge"""
-
-        dx, dy = self.dest.pos
-        ox, oy = self.org.pos
-        px, py = pos
-        return ((dx - px) * (dy - py)) - ((ox - px) * (oy - py))  > 0
-
-def makeEdge(org=Vertex(x=0, y=0), dest=Vertex(x=0, y=0)):
-
-    e = QuadEdge(org, dest)
-
-    e[0][1] = e # e.onext() e.oprev()  = e
+        return ret
 
 
-    lr = QuadEdge()
-    lr[0][1] = e[3][1]
-    lr[2][1] = e[1][1]
+def rightOf(edge, pos):
 
-    e[1][1] = lr
-    e[3][1] = lr.sym()
+    """Returns True if given Coordinate is right of the Edge"""
 
-    es = QuadEdge(dest, org)
+    dx, dy = edge.dest.pos
+    ox, oy = edge.org.pos
+    px, py = pos
+    return ((dx - px) * (dy - py)) - ((ox - px) * (oy - py))  < 0
 
-    e[2][1] = es
+def leftOf(edge, pos):
 
-    return e
+    """Returns True if given Coordinate is left of the Edge"""
+
+    dx, dy = edge.dest.pos
+    ox, oy = edge.org.pos
+    px, py = pos
+    return ((dx - px) * (dy - py)) - ((ox - px) * (oy - py))  > 0
 
 def delete(edge):
 
@@ -141,22 +131,20 @@ def delete(edge):
 def splice(a, b):
 
     alpha = a.onext().rot()
-    beta = a.onext().rot()
-    t1 = b.onext()
-    t2 = a.onext()
-    t3 = beta.onext()
-    t4 = alpha.onext()
-    a[0][1] = t1
-    b[0][1] = t2
-    alpha[0][1] = t3
-    beta[0][1] = t4
+    beta = b.onext().rot()
+    tmp = alpha.onext()
+    alpha[0].next = beta.onext()
+    beta[0].next = tmp
+    tmp = a.onext()
+    a[0].next = b.onext()
+    b[0].next = tmp
 
     return
 
 
 def connect(a, b):
 
-    new = makeEdge(a.dest, b.org)
+    new = QuadEdge(a.dest, b.org)
     splice(new, a.lnext())
     splice(new.sym(), b)
 

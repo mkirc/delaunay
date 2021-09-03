@@ -10,8 +10,8 @@ class Vertex:
 
     def __str__(self):
 
-        return 'Vertex-' + str(self.x) + '_'  + str(self.y)
+        return f'{self.pos}'
 
     def __repr__(self):
 
-        return 'Vertex-' + str(self.x) + '_'  + str(self.y)
+        return f'{self.pos}'
