@@ -1,3 +1,5 @@
+from quadEdge.primitives import *
+
 class Mesh:
     """
     Used to hold state of the mesh and
@@ -11,6 +13,7 @@ class Mesh:
         self.data = []
         self.vertices = []
         self.nextEdge = 0
+        self.rows = 1
 
     def initEdge(self):
 
@@ -21,9 +24,19 @@ class Mesh:
 
         return e
 
+
+
+    def lnext(self, e):
+
+        return rot(self.edges[invrot(e)])
+
+    def oprev(self, e):
+
+        return rot(self.edges[rot(e)])
+
     def makeEdge(self, dest, org):
 
-        tmp = initEdge()
+        tmp = self.initEdge()
         ret = tmp
         self.edges[tmp] = ret
         self.data[tmp] = org
@@ -63,14 +76,14 @@ class Mesh:
     def connect(self, a, b):
 
         c = self.makeEdge(self.dest(a), self.org(b))
-        self.splice(c, lnext(a))
+        self.splice(c, self.lnext(a))
         self.splice(sym(c), b)
 
         return c
 
     def deleteEdge(e):
 
-        self.splice(e, oprev(e))
+        self.splice(e, self.oprev(e))
         self.splice(sym(e), oprev(sym(e)))
 
         return

@@ -1,4 +1,7 @@
-def delauney(mesh, start, end, leftEdge, rightEdgae, rows):
+from quadEdge.primitives import *
+
+
+def delauney(mesh, start, end, leftEdge=None, rightEdge=None):
 
     m = mesh
     verts = m.vertices
@@ -21,8 +24,8 @@ def delauney(mesh, start, end, leftEdge, rightEdgae, rows):
         v1 = verts[start]
         v2 = verts[start + 1]
         v3 = verts[end]
-        a = makeEdge(v1, v2)
-        b = makeEdge(v2, v3)
+        a = m.makeEdge(v1, v2)
+        b = m.makeEdge(v2, v3)
         m.splice(sym(a), b)
         c = m.connect(b, a)
 

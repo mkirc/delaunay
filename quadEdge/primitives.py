@@ -16,20 +16,12 @@ def sym(e):
 
     return e ^ 2
 
-def lnext(e):
-
-    return rot(nextArray[invrot(e)])
-
-def oprev(e):
-
-    return rot(nextArray[rot(e)])
-
 def ccw(vA, vB, vC):
 
     """Returns true iff Vertices a,b and c form a ccw oriented triangle"""
-    ax, ay = vA
-    bx, by = vB
-    cx, cy = vC
+    ax, ay = vA.pos
+    bx, by = vB.pos
+    cx, cy = vC.pos
 
     return ((ax - cx) * (by - cy) - (bx - cx) * (ay - cy)) > 0
 
