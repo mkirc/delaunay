@@ -1,47 +1,40 @@
-def inCircle(vA, vB, vC, vD):
-    """
-    Returns true iff Vertex d lies in circle defined by a,b and c, 
-    see Guibas & Stolfi.
-    """
+def delauney(mesh, start, end, leftEdge, rightEdgae, rows):
 
-    asx = vA.x - vD.x
-    asy = vA.y - vD.y
-    bsx = vB.x - vD.x
-    bsy = vB.y - vD.y
-    csx = vC.x - vD.x
-    csy = vC.y - vD.y
+    m = mesh
+    verts = m.vertices
+    if start < (end - 2):
 
-    M = [
-            [asx, asy, (vA.x**2 - vD.x**2) + (vA.y**2 - vD.y**2)],
-            [bsx, bsy, (vB.x**2 - vD.x**2) + (vB.y**2 - vD.y**2)],
-            [csx, csy, (vC.x**2 - vD.x**2) + (vC.y**2 - vD.y**2)]
-        ]
-    det = M[0][0] * M[1][1] * M[2][2] \
-            + M[0][1] * M[1][2] * M[2][0] \
-            + M[0][2] * M[1][0] * M[2][1] \
-            - M[0][2] * M[1][1] * M[2][0] \
-            - M[0][0] * M[1][2] * M[2][1] \
-            - M[0][1] * M[1][0] * M[2][2]
+        pass
 
-    return det > 0
+    elif start >= (end - 1):
+        # two or one points
+        a = m.makeEdge(verts[start], verts[end])
+        leftEdge = a
+        rightEdge = sym(a)
+        if start == end:
+            print('Lonely Point.')
+            exit()
 
+    else:
+        # three points
 
+        v1 = verts[start]
+        v2 = verts[start + 1]
+        v3 = verts[end]
+        a = makeEdge(v1, v2)
+        b = makeEdge(v2, v3)
+        m.splice(sym(a), b)
+        c = m.connect(b, a)
 
-def ccw(vA, vB, vC):
+        if ccw(v1, v3, v2):
 
-    """Returns true iff Vertices a,b and c form a ccw oriented triangle"""
+            leftEdge = sym(a)
+            rightEdge =c
 
-    ax, ay = vA.pos
-    bx, by = vB.pos
-    cx, cy = vC.pos
+        else:
 
-    return ((ax - cx) * (by - cy) - (bx - cx) * (ay - cy)) > 0
+            leftEdge = a
+            rightEdge = sym(b)
 
-
-def valid(basel, edge):
-
-    return ccw(edge.dest, basel.dest, basel.org)
-
-def delauney():
-
-    pass
+        if not ccw(v1, v2, v3):
+            m.deleteEdge(c)
