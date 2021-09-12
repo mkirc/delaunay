@@ -24,17 +24,27 @@ class Mesh:
 
         return e
 
-
-
     def lnext(self, e):
 
         return rot(self.edges[invrot(e)])
+
+    def lprev(self, e):
+
+        return sym(self.edges[e])
 
     def oprev(self, e):
 
         return rot(self.edges[rot(e)])
 
-    def makeEdge(self, dest, org):
+    def rprev(self, e):
+
+        return self.edges[sym(e)]
+
+    def dprev(self, e):
+
+        return invrot(self.edges[invrot(e)])
+
+    def makeEdge(self, org, dest):
 
         tmp = self.initEdge()
         ret = tmp
@@ -73,11 +83,19 @@ class Mesh:
 
         return self.data[sym(e)]
 
-    def connect(self, a, b):
+    def connect(self, a, b, debug=False):
 
+        if debug:
+            print(f'Connect {a},{b}')
         c = self.makeEdge(self.dest(a), self.org(b))
+        if debug:
+            print(f'Lnexta {self.lnext(a)}')
         self.splice(c, self.lnext(a))
         self.splice(sym(c), b)
+        if debug:
+            print(f'cOrg {self.org(c)}')
+            for i in range(len(self.edges)):
+                print(i, self.edges[i], self.org(i), self.dest(i))
 
         return c
 
