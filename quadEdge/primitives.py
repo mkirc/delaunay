@@ -1,20 +1,71 @@
 
 """
 This file is a collection of quad-edge primitives,
-and the funcitonal core of the application.
+and the functional core of the application.
 """
 
 def rot(e):
 
-    return (e + 1) & 3 | (e & ~3)
+    return e.parent[(e.index + 1) % 4]
 
 def invrot(e):
 
-    return (e + 3) & 3 | (e & ~3)
+    return e.parent[(e.index + 3) % 4]
 
 def sym(e):
 
-    return e ^ 2
+    return e.parent[(e.index + 2) % 4]
+
+def org(e):
+
+    return e.data
+
+def dest(e):
+
+    return e.parent[sym(e).index].data
+
+def onext(e):
+
+    return e.next
+
+def lnext(e):
+
+    return rot(onext(invrot(e)))
+
+def lprev(e):
+
+    return sym(onext(e))
+
+def oprev(e):
+
+    return rot(onext(rot(e)))
+
+def rprev(e):
+
+    return onext(sym(e))
+
+def dprev(e):
+
+    return invrot(onext(invrot(e)))
+
+
+def splice(a, b):
+
+    alpha = rot(onext(a))
+    beta = rot(onext(b))
+
+    tmp = onext(alpha)
+
+    alpha.next = onext(beta)
+    beta.next = onext(alpha)
+
+    tmp = onext(a)
+    a.next = onext(b)
+    b.next = onext(a)
+
+    return
+
+
 
 def ccw(vA, vB, vC):
 

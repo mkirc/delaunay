@@ -1,4 +1,5 @@
 from quadEdge.primitives import *
+from quadEdge.edge import QuadEdge, Edge
 
 class Mesh:
     """
@@ -9,100 +10,37 @@ class Mesh:
 
     def __init__(self):
 
-        self.edges = []
-        self.data = []
+        self.quadEdges = []
         self.vertices = []
         self.nextEdge = 0
         self.rows = 1
 
-    def initEdge(self):
-
-        e = self.nextEdge
-        self.edges += [None] * 4
-        self.data += [None] * 4
-        self.nextEdge += 4
-
-        return e
-
-    def lnext(self, e):
-
-        return rot(self.edges[invrot(e)])
-
-    def lprev(self, e):
-
-        return sym(self.edges[e])
-
-    def oprev(self, e):
-
-        return rot(self.edges[rot(e)])
-
-    def rprev(self, e):
-
-        return self.edges[sym(e)]
-
-    def dprev(self, e):
-
-        return invrot(self.edges[invrot(e)])
 
     def makeEdge(self, org, dest):
 
-        tmp = self.initEdge()
-        ret = tmp
-        self.edges[tmp] = ret
-        self.data[tmp] = org
-        tmp += 1
-        self.edges[tmp] = ret + 3
-        tmp += 1
-        self.edges[tmp] = ret + 2
-        self.data[tmp] = dest
-        tmp += 1
-        self.edges[tmp] = ret + 1
+        """Contruct Edges like Q&S propose, add QuadEdge to mesh"""
 
-        return ret
+        qe = QuadEdge(org, dest)
+        qe[1].next = qe[3]
+        qe[3].next = qe[1]
 
-    def splice(self, a, b):
+        self.quadEdges.append(qe)
 
-        alpha = rot(self.edges[a])
-        beta = rot(self.edges[b])
+        return qe[0]
 
-        tmp = self.edges[alpha]
-        self.edges[alpha] = self.edges[beta]
-        self.edges[beta] = tmp
 
-        tmp = self.edges[a]
-        self.edges[a] = self.edges[b]
-        self.edges[b] = tmp
+    def connect(self, a, b):
 
-        return
-
-    def org(self, e):
-
-        return self.data[e]
-
-    def dest(self, e):
-
-        return self.data[sym(e)]
-
-    def connect(self, a, b, debug=False):
-
-        if debug:
-            print(f'Connect {a},{b}')
-        c = self.makeEdge(self.dest(a), self.org(b))
-        if debug:
-            print(f'Lnexta {self.lnext(a)}')
-        self.splice(c, self.lnext(a))
-        self.splice(sym(c), b)
-        if debug:
-            print(f'cOrg {self.org(c)}')
-            for i in range(len(self.edges)):
-                print(i, self.edges[i], self.org(i), self.dest(i))
+        c = self.makeEdge(dest(a), org(b))
+        splice(c, lnext(a))
+        splice(sym(c), b)
 
         return c
 
     def deleteEdge(e):
 
-        self.splice(e, self.oprev(e))
-        self.splice(sym(e), oprev(sym(e)))
+        splice(e, oprev(e))
+        splice(sym(e), oprev(sym(e)))
 
         return
 

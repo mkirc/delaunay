@@ -12,8 +12,5 @@ if __name__ == "__main__":
     end = len(m.vertices) - 1
     # rows = int(0.5 + math.sqrt(end / math.log(end)))
     delaunay(m, 0, end)
-    print(m.edges)
-    print([(i, m.org(i), m.dest(i)) for i in range(len(m.edges)) if m.org(i) is not None])
-
-    # for idx,e in enumerate(m.edges):
-    #     print(f'Edge {idx}, Next: {e}, Org: {m.org(idx)}, Dest: {m.dest(idx)}')
+    for qe in m.quadEdges:
+        print([f'{org(e)}, {dest(e)}' for e in qe if org(e) is not None])

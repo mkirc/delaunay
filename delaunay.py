@@ -5,41 +5,41 @@ def merge(mesh, ldo, ldi, rdi, rdo):
 
     m = mesh
 
-    print(m.org(ldi), m.dest(ldi), ldi)
-    print(m.org(rdi), m.dest(rdi), rdi)
+    print(org(ldi), dest(ldi), ldi)
+    print(org(rdi), dest(rdi), rdi)
     # 'Compute the lower common tangent of L and R'
     while True:
-        while ccw(m.org(rdi), m.org(ldi), m.dest(ldi)):
-            ldi = m.lnext(ldi)
-        if ccw(m.org(ldi), m.dest(rdi), m.org(rdi)):
-            rdi = m.rprev(rdi)
+        while ccw(org(rdi), org(ldi), dest(ldi)):
+            ldi = lnext(ldi)
+        if ccw(org(ldi), dest(rdi), org(rdi)):
+            rdi = rprev(rdi)
         else:
             break
 
     # 'Create a first cross edge basel from rdi.Org to ldi.Org'
-    basel = m.connect(sym(rdi), ldi, True)
-    print(m.org(ldi), m.dest(ldi), ldi)
-    print(m.org(rdi), m.dest(rdi), rdi)
-    print(m.org(basel), m.dest(basel), basel)
+    basel = m.connect(sym(rdi), ldi)
+    print(org(ldi), dest(ldi), ldi)
+    print(org(rdi), dest(rdi), rdi)
+    print(org(basel), dest(basel), basel)
 
-    if m.dest(ldi) == m.org(ldo):
+    if dest(ldi) == org(ldo):
         ldo = sym(basel)
-    if m.org(rdo) == m.org(rdi):
+    if org(rdo) == org(rdi):
         rdo = basel
     
-    lcand = m.rprev(basel)
-    rcand = m.oprev(basel)
+    lcand = rprev(basel)
+    rcand = oprev(basel)
 
-    print(m.org(basel), m.dest(basel), 'b')
-    print(m.org(lcand), m.dest(lcand), 'l')
-    print(m.org(rcand), m.dest(rcand), 'r')
+    print(org(basel), dest(basel), 'b')
+    print(org(lcand), dest(lcand), 'l')
+    print(org(rcand), dest(rcand), 'r')
 
     def valid(e):
         """
         Since valid() contains a comparison with basel,
         it is defined inside merge()
         """
-        return ccw(m.dest(e), m.dest(basel), m.org(basel))
+        return ccw(dest(e), dest(basel), org(basel))
     
     while True:
         """
@@ -49,8 +49,8 @@ def merge(mesh, ldo, ldi, rdi, rdo):
 
         if valid(lcand):
             print('while lcand valid')
-            while inCircle(m.dest(basel), m.org(basel), m.dest(lcand), m.dest(m.edges[lcand])):
-                t = m.edges[lcand]
+            while inCircle(dest(basel), org(basel), dest(lcand), dest(onext(lcand))):
+                t = onext(lcand)
                 m.deleteEdge(lcand)
                 lcand = t
 
@@ -59,8 +59,8 @@ def merge(mesh, ldo, ldi, rdi, rdo):
         """
         if valid(rcand):
             print('while rcand valid')
-            while inCircle(m.dest(basel), m.org(basel), m.dest(rcand), m.dest(m.edges[rcand])):
-                t = m.oprev(rcand)
+            while inCircle(dest(basel), org(basel), dest(rcand), dest(onext(lcand))):
+                t = oprev(rcand)
                 m.deleteEdge(rcand)
                 rcand = t
         
@@ -80,7 +80,7 @@ def merge(mesh, ldo, ldi, rdi, rdo):
         """
         if (not lvalid or 
                 (rvalid and 
-                    inCircle(m.dest(lcand), m.org(lcand), m.org(rcand), m.dest(rcand)))):
+                    inCircle(dest(lcand), org(lcand), org(rcand), dest(rcand)))):
 
             # 'Add cross edge basel from rcand.Dest to basel.Dest'
             basel = m.connect(rcand, sym(basel)) 
@@ -116,10 +116,10 @@ def delaunay(mesh, start, end, leftEdge=None, rightEdge=None, rows=None):
         merge(m, ldo, ldi, rdi, rdo) 
 
 
-        # while m.org(ldo) != xMin:
+        # while org(ldo) != xMin:
         #     ldo = m.rprev(ldo)
 
-        # while m.org(rdo) != xMax:
+        # while org(rdo) != xMax:
         #     rdo = m.lprev(rdo)
 
         # leftEdge = ldo
@@ -155,7 +155,7 @@ def delaunay(mesh, start, end, leftEdge=None, rightEdge=None, rows=None):
         v3 = verts[end]
         a = m.makeEdge(v1, v2)
         b = m.makeEdge(v2, v3)
-        m.splice(sym(a), b)
+        splice(sym(a), b)
 
         """'Now close the triangle'"""
         
