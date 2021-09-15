@@ -18,7 +18,7 @@ class Mesh:
 
     def makeEdge(self, org, dest):
 
-        """Contruct Edges like Q&S propose, add QuadEdge to mesh"""
+        """Construct Edges, adds QuadEdge to mesh. See Q&S"""
 
         qe = QuadEdge(org, dest)
         qe[1].next = qe[3]
@@ -31,6 +31,9 @@ class Mesh:
 
     def connect(self, a, b):
 
+        """Connect two edges by a third, while making shure
+        they share the same left face. See Q&S"""
+
         c = self.makeEdge(dest(a), org(b))
         splice(c, lnext(a))
         splice(sym(c), b)
@@ -39,8 +42,18 @@ class Mesh:
 
     def deleteEdge(e):
 
+        """Delete edge without changing the topology"""
+
         splice(e, oprev(e))
         splice(sym(e), oprev(sym(e)))
 
+        return
+
+    def loadVertices(self, vertList):
+
+        """Sort vertices on the x-axis"""
+
+        self.vertices = sorted(vertList, key=lambda vert: vert.x)
+        
         return
 

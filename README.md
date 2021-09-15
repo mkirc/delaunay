@@ -13,7 +13,7 @@ wip
 
 ## How?
 
-In their paper *'Primitives for the Manipulation 
+In their paper *'Primitives for the Manipulation
 of General Subdivisions and the Computation of Voronoi Diagrams'*[0]
 from 1985, L. Guibas & J. Stolfi propose a divide-and-conquer-algorithm
 with all the rigor one can hope for.
@@ -32,11 +32,13 @@ Scipy's Delaunay[2] is based on QHull's, which means
 it computes a hull for a pointset, then raises
 the interior points so it can continue finding
 the hull for them, projecting them back to their
-positions. 
+positions.
 
 While QHull is fine for 3D, the dependency seems
 a little bit bulky for the task at hand.
 
 [0] - tba
+
 [1] - [Dwyer's Algorithm](https://github.com/rexdwyer/DelaunayTriangulation)
+
 [2] - tba

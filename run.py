@@ -8,7 +8,9 @@ if __name__ == "__main__":
 
     m = Mesh()
 
-    m.vertices = [Vertex(0, 1), Vertex(0, 0), Vertex(1, 1), Vertex(1, 0)]
+    # m.vertices = [Vertex(0, 1), Vertex(0, 0), Vertex(1, 1), Vertex(1, 0)]
+    vertices = [Vertex(1, 1), Vertex(0, 1), Vertex(1, 0), Vertex(0, 0)]
+    m.loadVertices(vertices)
     end = len(m.vertices) - 1
     # rows = int(0.5 + math.sqrt(end / math.log(end)))
     delaunay(m, 0, end)
