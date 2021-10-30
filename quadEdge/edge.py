@@ -10,8 +10,8 @@ class QuadEdge:
                 , Edge(parent=self, index=2, data=dest)
                 , Edge(parent=self, index=3)
                 ]
-        self.org = None
-        self.dest = None
+        self.org = org
+        self.dest = dest
 
     def __getitem__(self, idx):
 

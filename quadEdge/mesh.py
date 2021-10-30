@@ -40,7 +40,7 @@ class Mesh:
 
         return c
 
-    def deleteEdge(e):
+    def deleteEdge(self, e):
 
         """Delete edge without changing the topology"""
 

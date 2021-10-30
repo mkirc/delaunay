@@ -5,35 +5,35 @@ def merge(mesh, ldo, ldi, rdi, rdo):
 
     m = mesh
 
-    print(org(ldi), dest(ldi), ldi)
-    print(org(rdi), dest(rdi), rdi)
     # 'Compute the lower common tangent of L and R'
     while True:
-        while ccw(org(rdi), org(ldi), dest(ldi)):
+        if ccw(org(rdi), org(ldi), dest(ldi)):
             ldi = lnext(ldi)
-        if ccw(org(ldi), dest(rdi), org(rdi)):
+        elif ccw(org(ldi), org(rdi), dest(rdi)):
             rdi = rprev(rdi)
         else:
             break
 
+    # while True:
+    #     while ccw(org(ldi), dest(ldi), org(rdi)):
+    #         ldi = lnext(ldi)
+    #         if ccw(dest(rdi), org(rdi), org(ldi)):
+    #             rdi = rprev(rdi)
+    #         else:
+    #             break
+
     # 'Create a first cross edge basel from rdi.Org to ldi.Org'
     basel = m.connect(sym(rdi), ldi)
-    print(org(ldi), dest(ldi), ldi)
-    print(org(rdi), dest(rdi), rdi)
-    print(org(basel), dest(basel), basel)
 
+    
     if dest(ldi) == org(ldo):
         ldo = sym(basel)
-    if org(rdo) == org(rdi):
+    if org(rdi) == org(rdo):
         rdo = basel
     
     lcand = rprev(basel)
     rcand = oprev(basel)
-
-    print(org(basel), dest(basel), 'b')
-    print(org(lcand), dest(lcand), 'l')
-    print(org(rcand), dest(rcand), 'r')
-
+    
     def valid(e):
         """
         Since valid() contains a comparison with basel,
@@ -48,7 +48,7 @@ def merge(mesh, ldo, ldi, rdi, rdo):
         """
 
         if valid(lcand):
-            print('while lcand valid')
+            # print('while lcand valid')
             while inCircle(dest(basel), org(basel), dest(lcand), dest(onext(lcand))):
                 t = onext(lcand)
                 m.deleteEdge(lcand)
@@ -58,7 +58,7 @@ def merge(mesh, ldo, ldi, rdi, rdo):
         'Symmetrically, locate the first R point to be hit, and delete R edges'
         """
         if valid(rcand):
-            print('while rcand valid')
+            # print('while rcand valid')
             while inCircle(dest(basel), org(basel), dest(rcand), dest(onext(lcand))):
                 t = oprev(rcand)
                 m.deleteEdge(rcand)
@@ -107,6 +107,7 @@ def delaunay(mesh, start, end, leftEdge=None, rightEdge=None, rows=None):
 
         # divide points in two halves
         split = (end - start) // 2
+        print(start, end, split)
 
         # recurse down the halves 
         ldo, ldi = delaunay(m, start, split)
@@ -116,14 +117,14 @@ def delaunay(mesh, start, end, leftEdge=None, rightEdge=None, rows=None):
         merge(m, ldo, ldi, rdi, rdo) 
 
 
-        # while org(ldo) != xMin:
-        #     ldo = m.rprev(ldo)
+        while org(ldo) != xMin:
+            ldo = m.rprev(ldo)
 
-        # while org(rdo) != xMax:
-        #     rdo = m.lprev(rdo)
+        while org(rdo) != xMax:
+            rdo = m.lprev(rdo)
 
-        # leftEdge = ldo
-        # rightEdge = rdo
+        leftEdge = ldo
+        rightEdge = rdo
         
         return [leftEdge, rightEdge]
 
