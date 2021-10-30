@@ -17,11 +17,11 @@ In their paper *'Primitives for the Manipulation
 of General Subdivisions and the Computation of Voronoi Diagrams'*[0]
 from 1985, L. Guibas & J. Stolfi propose a divide-and-conquer-algorithm
 with all the rigor one can hope for.
-The algorithm runs in O(n log(n), which should be fine,
+The algorithm runs in O(n log(n)), which should be fine,
 but for really huge sets R. Dwyers modification [1] of the
 original algo from 1986 should provide a significant
 improvement. For now i'll stick with the first one
-mentioned, but later maybe i'll progress.
+mentioned, but later maybe this work will progress.
 
 ## Why?
 
