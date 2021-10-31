@@ -31,3 +31,8 @@ class Edge:
         self.data = data
         self.index = index
         self.parent = parent
+        self.id = hash(self) % 10000
+
+    def __repr__(self):
+
+        return str(self.id)
