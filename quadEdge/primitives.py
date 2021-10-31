@@ -80,11 +80,11 @@ def splice(a, b):
     tmp = onext(alpha)
 
     alpha.next = onext(beta)
-    beta.next = onext(alpha)
+    beta.next = tmp
 
     tmp = onext(a)
     a.next = onext(b)
-    b.next = onext(a)
+    b.next = tmp
 
     return
 
