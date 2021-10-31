@@ -14,7 +14,7 @@ class Plotter:
         # self.ax.yaxis.pane.set_edgecolor('black')
         # self.ax.zaxis.pane.set_edgecolor('black')
         self.ax.grid(False)
-        self.ax.set_title('Delauney Trangulation')
+        self.ax.set_title('Delaunay Trangulation')
 
     def plotPoints(self, ps):
         """takes an 2d array [[xs], [ys]] and scatterplots is on the plane"""
