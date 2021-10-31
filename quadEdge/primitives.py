@@ -74,6 +74,10 @@ def dprev(e):
 
 def splice(a, b):
 
+    tmp = onext(a)
+    a.next = onext(b)
+    b.next = tmp
+    
     alpha = rot(onext(a))
     beta = rot(onext(b))
 
@@ -82,9 +86,6 @@ def splice(a, b):
     alpha.next = onext(beta)
     beta.next = tmp
 
-    tmp = onext(a)
-    a.next = onext(b)
-    b.next = tmp
 
     return
 
@@ -92,7 +93,15 @@ def splice(a, b):
 
 def ccw(vA, vB, vC):
 
-    """Returns true iff Vertices a,b and c form a ccw oriented triangle"""
+    """
+    Returns true iff Vertices a,b and c form a ccw oriented triangle
+
+    This is adapted from Shewchuk's Routines for Arbitrary Precision 
+    Floating-point Arithmetic and Fast Robust Geometric Predicates.
+    http://www.cs.cmu.edu/~quake/robust.html
+
+    But of course its the nonrobust version.
+    """
     ax, ay = vA.pos
     bx, by = vB.pos
     cx, cy = vC.pos
@@ -102,27 +111,27 @@ def ccw(vA, vB, vC):
 def inCircle(vA, vB, vC, vD):
     """
     Returns true iff Vertex d lies in circle defined by a,b and c
+    
+    This is adapted from Shewchuk's Routines for Arbitrary Precision 
+    Floating-point Arithmetic and Fast Robust Geometric Predicates.
+    http://www.cs.cmu.edu/~quake/robust.html
+
+    But of course its the nonrobust version.
     """
+    
+    adx = vA.x - vD.x
+    ady = vA.y - vD.y
+    bdx = vB.x - vD.x
+    bdy = vB.y - vD.y
+    cdx = vC.x - vD.x
+    cdy = vC.y - vD.y
 
-    asx = vA.x - vD.x
-    asy = vA.y - vD.y
-    bsx = vB.x - vD.x
-    bsy = vB.y - vD.y
-    csx = vC.x - vD.x
-    csy = vC.y - vD.y
+    abdet = adx * bdy - bdx * ady;
+    bcdet = bdx * cdy - cdx * bdy;
+    cadet = cdx * ady - adx * cdy;
+    alift = adx * adx + ady * ady;
+    blift = bdx * bdx + bdy * bdy;
+    clift = cdx * cdx + cdy * cdy;
 
-    M = [
-            [asx, asy, (vA.x**2 - vD.x**2) + (vA.y**2 - vD.y**2)],
-            [bsx, bsy, (vB.x**2 - vD.x**2) + (vB.y**2 - vD.y**2)],
-            [csx, csy, (vC.x**2 - vD.x**2) + (vC.y**2 - vD.y**2)]
-        ]
 
-    det = M[0][0] * M[1][1] * M[2][2] \
-            + M[0][1] * M[1][2] * M[2][0] \
-            + M[0][2] * M[1][0] * M[2][1] \
-            - M[0][2] * M[1][1] * M[2][0] \
-            - M[0][0] * M[1][2] * M[2][1] \
-            - M[0][1] * M[1][0] * M[2][2]
-
-    return det > 0
-
+    return (alift * bcdet + blift * cadet + clift * abdet) > 0
