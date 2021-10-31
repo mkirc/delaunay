@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     seed(123123123)
 
-    N = 6
+    N = 5
 
     vertices = [Vertex(uniform(0, 100), uniform(0, 100)) for v in range(N)]
 
@@ -29,12 +29,13 @@ if __name__ == "__main__":
     for qe in m.quadEdges:
         if qe.org is not None:
             # print([f'{org(e)}, {dest(e)}' for e in qe if org(e) is not None])
-            print(qe.org.x, qe.org.y, qe.dest.x, qe.dest.y)
+            # print(qe.org.x, qe.org.y, qe.dest.x, qe.dest.y)
             ls += [[[qe.org.x, qe.dest.x], [qe.org.y, qe.dest.y]]]
 
-    print(len(ls))
-    for l in ls:
-        print(l)
+    # print(len(ls))
+    # for l in ls:
+    #     print(l)
+    debug(m, next=True, edges=True)
 
     p.plotPoints([[v.x for v in m.vertices], [v.y for v in m.vertices]])
     p.plotLines(ls)

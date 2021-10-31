@@ -3,6 +3,29 @@
 This file is a collection of quad-edge primitives,
 and the functional core of the application.
 """
+def debug(m, data=True, next=False, edges=False):
+    '''takes an Mesh-Object and prints debug stuff'''
+
+    if data:
+        print('Org, Dest')
+        for qe in m.quadEdges:   
+            print(f'{qe.org}, {qe.dest}')
+        else:
+            print('\n')
+
+    if edges:
+        print('Edges')
+        for qe in m.quadEdges:   
+            print([e for e in qe.edges])
+        else:
+            print('\n')
+    if next:
+        print('Edge, Nexts')
+        for qe in m.quadEdges:   
+            print(qe[0], [e.next for e in qe.edges])
+        else:
+            print('\n')
+    return
 
 def rot(e):
 
