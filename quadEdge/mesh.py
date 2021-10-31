@@ -46,6 +46,7 @@ class Mesh:
 
         splice(e, oprev(e))
         splice(sym(e), oprev(sym(e)))
+        self.quadEdges.remove(e.parent)
 
         return
 
