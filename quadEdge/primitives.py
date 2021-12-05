@@ -8,20 +8,20 @@ def debug(m, data=True, next=False, edges=False):
 
     if data:
         print('Org, Dest')
-        for qe in m.quadEdges:   
-            print(f'{qe.org}, {qe.dest}')
+        for qe in m.quadEdges:
+            print(f'{qe}: [{qe.org.x:.4f}, {qe.org.y:.4f}], [{qe.dest.x:.4f}, {qe.dest.y:.4f}]')
         else:
             print('\n')
 
     if edges:
         print('Edges')
-        for qe in m.quadEdges:   
+        for qe in m.quadEdges:
             print([e for e in qe.edges])
         else:
             print('\n')
     if next:
         print('Edge, Nexts')
-        for qe in m.quadEdges:   
+        for qe in m.quadEdges:
             print(qe[0], [e.next for e in qe.edges])
         else:
             print('\n')
@@ -74,10 +74,6 @@ def dprev(e):
 
 def splice(a, b):
 
-    tmp = onext(a)
-    a.next = onext(b)
-    b.next = tmp
-    
     alpha = rot(onext(a))
     beta = rot(onext(b))
 
@@ -86,6 +82,9 @@ def splice(a, b):
     alpha.next = onext(beta)
     beta.next = tmp
 
+    tmp = onext(a)
+    a.next = onext(b)
+    b.next = tmp
 
     return
 
@@ -96,7 +95,7 @@ def ccw(vA, vB, vC):
     """
     Returns true iff Vertices a,b and c form a ccw oriented triangle
 
-    This is adapted from Shewchuk's Routines for Arbitrary Precision 
+    This is adapted from Shewchuk's Routines for Arbitrary Precision
     Floating-point Arithmetic and Fast Robust Geometric Predicates.
     http://www.cs.cmu.edu/~quake/robust.html
 
@@ -111,14 +110,14 @@ def ccw(vA, vB, vC):
 def inCircle(vA, vB, vC, vD):
     """
     Returns true iff Vertex d lies in circle defined by a,b and c
-    
-    This is adapted from Shewchuk's Routines for Arbitrary Precision 
+
+    This is adapted from Shewchuk's Routines for Arbitrary Precision
     Floating-point Arithmetic and Fast Robust Geometric Predicates.
     http://www.cs.cmu.edu/~quake/robust.html
 
     But of course its the nonrobust version.
     """
-    
+
     adx = vA.x - vD.x
     ady = vA.y - vD.y
     bdx = vB.x - vD.x

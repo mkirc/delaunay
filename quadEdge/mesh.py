@@ -14,17 +14,19 @@ class Mesh:
         self.vertices = []
         self.nextEdge = 0
         self.rows = 1
+        self.qid = 0
 
 
     def makeEdge(self, org, dest):
 
         """Construct Edges, adds QuadEdge to mesh. See Q&S"""
 
-        qe = QuadEdge(org, dest)
+        qe = QuadEdge(org, dest, id=str(self.qid))
         qe[1].next = qe[3]
         qe[3].next = qe[1]
 
         self.quadEdges.append(qe)
+        self.qid += 1
 
         return qe[0]
 
@@ -46,6 +48,7 @@ class Mesh:
 
         splice(e, oprev(e))
         splice(sym(e), oprev(sym(e)))
+        # e.parent.edges.remove(e)
         self.quadEdges.remove(e.parent)
 
         return

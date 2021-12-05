@@ -2,8 +2,9 @@ class QuadEdge:
 
     """Container for Edges, which can be accessed by get/setitem"""
 
-    def __init__(self, org, dest):
+    def __init__(self, org, dest, id='0'):
 
+        self.id = id
         self.edges = [
                 Edge(parent=self, data=org)
                 , Edge(parent=self, index=1)
@@ -12,6 +13,10 @@ class QuadEdge:
                 ]
         self.org = org
         self.dest = dest
+    
+    def __repr__(self):
+
+        return self.id
 
     def __getitem__(self, idx):
 
@@ -20,6 +25,7 @@ class QuadEdge:
     def __setitem__(self, idx, val):
 
         self.edges[idx] = val
+
 
 class Edge:
 
@@ -31,8 +37,8 @@ class Edge:
         self.data = data
         self.index = index
         self.parent = parent
-        self.id = hash(self) % 10000
+        self.id = parent.id + f'.{self.index}'
 
     def __repr__(self):
 
-        return str(self.id)
+        return self.id
