@@ -13,3 +13,12 @@ class Vertex:
     def __repr__(self):
 
         return f"{self.pos}"
+
+    def __hash__(self):
+
+        return hash(''.join([str(x) for x in self.pos]))
+
+    @property
+    def id(self):
+
+        return self.__hash__()

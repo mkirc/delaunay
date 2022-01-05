@@ -14,9 +14,13 @@ class QuadEdge:
         self.org = org
         self.dest = dest
 
+    def __str__(self):
+
+        return f'{self.id}'
+
     def __repr__(self):
 
-        return self.id
+        return f'QuadEdge-{self.id}'
 
     def __getitem__(self, idx):
 
@@ -41,4 +45,8 @@ class Edge:
 
     def __repr__(self):
 
-        return self.id
+        return 'Edge-{self.id}'
+
+    def __str__(self):
+
+        return f'{self.id}'
