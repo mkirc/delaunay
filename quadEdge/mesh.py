@@ -1,5 +1,6 @@
-from quadEdge.primitives import *
-from quadEdge.edge import QuadEdge, Edge
+from quadEdge.primitives import sym, org, dest, lnext, oprev, splice
+from quadEdge.edge import QuadEdge
+
 
 class Mesh:
     """
@@ -16,7 +17,6 @@ class Mesh:
         self.rows = 1
         self.qid = 0
 
-
     def makeEdge(self, org, dest):
 
         """Construct Edges, adds QuadEdge to mesh. See Q&S"""
@@ -29,7 +29,6 @@ class Mesh:
         self.qid += 1
 
         return qe[0]
-
 
     def connect(self, a, b):
 
@@ -58,6 +57,5 @@ class Mesh:
         """Sort vertices on the x-axis"""
 
         self.vertices = sorted(vertList, key=lambda vert: vert.x)
-        
-        return
 
+        return

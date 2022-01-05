@@ -1,6 +1,4 @@
-
 class Vertex:
-
     def __init__(self, x=None, y=None):
 
         self.pos = [x, y]
@@ -10,8 +8,8 @@ class Vertex:
 
     def __str__(self):
 
-        return f'{self.pos}'
+        return f"{self.pos}"
 
     def __repr__(self):
 
-        return f'{self.pos}'
+        return f"{self.pos}"
