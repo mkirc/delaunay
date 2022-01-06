@@ -6,14 +6,11 @@ class Plotter:
 
     def __init__(self):
 
-        plt.style.use(["dark_background"])
+        # plt.style.use(["dark_background"])
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot()
-        # self.ax.xaxis.pane.set_edgecolor('black')
-        # self.ax.yaxis.pane.set_edgecolor('black')
-        # self.ax.zaxis.pane.set_edgecolor('black')
         self.ax.grid(False)
-        self.ax.set_title("Delaunay Trangulation")
+        # self.ax.set_title("Delaunay Trangulation")
 
     def plotPoints(self, ps):
         """takes an 2d array [[xs], [ys]] and scatterplots is on the plane"""
@@ -28,7 +25,7 @@ class Plotter:
         for line in ls:
             self.ax.plot(line[0],
                          line[1],
-                         color="grey",
+                         color="darkgrey",
                          alpha=0.8,
                          linewidth=0.7)
 
@@ -37,6 +34,6 @@ class Plotter:
         if not savePath:
             plt.show()
         else:
-            plt.savefig(savePath, dpi=100)
+            plt.savefig(savePath, dpi=300)
         # plt.show()
         plt.close()

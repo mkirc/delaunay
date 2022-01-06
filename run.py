@@ -28,5 +28,5 @@ if __name__ == "__main__":
     # debug(m, next=True)
 
     p.plotLines(ls)
-    p.plotPoints([[v.x for v in m.vertices], [v.y for v in m.vertices]])
-    p.save()
+    # p.plotPoints([[v.x for v in m.vertices], [v.y for v in m.vertices]])
+    p.save('./plot.png')
