@@ -1,15 +1,19 @@
 ## What?
 
-This is a library for delaunay triangulation
-in 2D on given pointsets. Maybe one day voronoi
-tessellation will be added, since its based on
+This is a pure python library for finding the
+delaunay triangulation on given pointsets.
+Maybe one day voronoi tessellation will be added, since its based on
 the [quad-edge datastructure](https://en.wikipedia.org/wiki/Quad-edge),
 which makes finding the dual to each represenations
 easy.
+<img src="./images/plot.png" alt="delaunay triangulation" width="500"/>
 
 ## Installation && Usage
 
-wip
+Either clone this repository or install via
+pip:
+
+`pip install delaunayTriangulation`
 
 ## How?
 
@@ -25,20 +29,21 @@ mentioned, but later maybe this work will progress.
 
 ## Why?
 
-Normally I would just use scipy and concentrate
-on the meaty stuff, but consider this:
+In comparison with scipy[2] this library is
+consirably more lightweight. Of course scipy's delaunay is
+based on QHull[3], a library written in c, which means it
+runs ~40 times faster than a python implementation [4].
 
-Scipy's Delaunay[2] is based on QHull's, which means
-it computes a hull for a pointset, then raises
-the interior points so it can continue finding
-the hull for them, projecting them back to their
-positions.
+## References
 
-While QHull is fine for 3D, the dependency seems
-a little bit bulky for the task at hand.
-
-[0] - tba
+[0] Guibas, Leonidas and Stolfi, Jorge
+'Primitives for the Manipulation of General Subdivisions and the Computation of Voronoi'
+In: ACM Trans. Graph.4.2 (Apr.1985), pp. 74–123. issn: 0730-0301 doi:10.1145/282918.282923
 
 [1] - [Dwyer's Algorithm](https://github.com/rexdwyer/DelaunayTriangulation)
 
-[2] - tba
+[2] - [Scipy Delaunay Implementation](https://scipy.org/)
+
+[3] - [QHull Delaunay Implementation](http://www.qhull.org/html/qdelaun.htm)
+
+[4] - [V-hill's Delaunay Implementation](https://github.com/V-Hill/delaunay-triangulation)
