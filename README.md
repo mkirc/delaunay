@@ -16,6 +16,7 @@ pip:
 
 `pip install delaunayTriangulation`
 
+An example usage can be found [here](./src/run.py).
 ## How?
 
 In their paper *'Primitives for the Manipulation
