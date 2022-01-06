@@ -6,6 +6,7 @@ Maybe one day voronoi tessellation will be added, since its based on
 the [quad-edge datastructure](https://en.wikipedia.org/wiki/Quad-edge),
 which makes finding the dual to each represenations
 easy.
+
 <img src="./images/plot.png" alt="delaunay triangulation" width="500"/>
 
 ## Installation && Usage
