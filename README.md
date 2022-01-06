@@ -14,11 +14,11 @@ easy.
 Either clone this repository or install via
 pip:
 
-`pip install delaunayTriangulation`
+`pip install delaunay`
 
 An example usage looks like this:
 
-```(python)
+```python
 from random import seed, uniform
 from delaunay.quadedge.mesh import Mesh
 from delaunay.quadedge.point import Vertex
