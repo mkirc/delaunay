@@ -1,5 +1,10 @@
-from quadEdge.primitives import sym, org, dest, lnext, oprev, splice
-from quadEdge.edge import QuadEdge
+from delaunay.quadedge.primitives import (sym,
+                                          org,
+                                          dest,
+                                          lnext,
+                                          oprev,
+                                          splice)
+from delaunay.quadedge.edge import QuadEdge
 
 
 class Mesh:

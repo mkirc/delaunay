@@ -1,4 +1,4 @@
-from quadEdge.primitives import (
+from delaunay.quadedge.primitives import (
     debug,
     sym,
     org,
