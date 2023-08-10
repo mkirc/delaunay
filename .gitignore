@@ -1,6 +1,7 @@
 *.csv
 *.egg-info/
 dist/
+build/
 **/__pycache__/
 venv/
 *.swp
