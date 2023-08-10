@@ -5,10 +5,10 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="delaunay",
-    version="1.0.3",
+    version="1.0.4",
     author="mkirc",
     author_email="m.p.kirchner@gmx.de",
-    description="A lightweight delaunay triangulation implementation in python",
+    description="a lightweight 2d delaunay triangulator based on algorithm by Guibas & Stolfi",
     long_description=long_description,
     long_description_content_type="text/markdown",
     project_urls={
