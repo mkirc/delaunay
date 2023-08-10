@@ -1,5 +1,4 @@
 from delaunay.quadedge.primitives import (
-    debug,
     sym,
     org,
     dest,
@@ -11,8 +10,8 @@ from delaunay.quadedge.primitives import (
     splice,
     ccw,
     inCircle,
+    valid,
 )  # flake8 does not like star imports
-
 
 def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
 
@@ -29,33 +28,23 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
 
         # divide points in two halves
         split = (end - start) // 2 + start
-        # print(f"split! {split}")
 
         # recurse down the halves
         ldo, ldi = delaunay(m, start, split)
         rdi, rdo = delaunay(m, (split + 1), end)
 
-        # print(f"init: {ldo, ldi, rdi, rdo}")
 
         # 'Compute the lower common tangent of L and R'
         while True:
             if ccw(org(rdi), org(ldi), dest(ldi)):  # leftOf
-                # print("change ldi")
                 ldi = lnext(ldi)
             elif ccw(org(ldi), dest(rdi), org(rdi)):  # rightOf
-                # print("change rdi")
                 rdi = rprev(rdi)
             else:
                 break
 
         # 'Create a first cross edge basel from rdi.Org to ldi.Org'
-        if rdi.parent.id == "6":
-            debug(m, next=True)
-        # print(f"first basel {sym(rdi)} to {ldi}")
         basel = m.connect(sym(rdi), ldi)
-        if basel.parent.id == "8":
-            debug(m, next=True)
-
         if org(ldi) == org(ldo):
             ldo = sym(basel)
         if org(rdi) == org(rdo):
@@ -64,12 +53,6 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
         # merge the obtained halves
         # merge(m, ldo, ldi, rdi, rdo)
 
-        def valid(e):
-            """
-            Since valid() contains a comparison with basel,
-            it is defined inside merge()
-            """
-            return ccw(dest(e), dest(basel), org(basel))
 
         while True:
             """
@@ -77,14 +60,10 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
              by the rising bubble and delete L edges out of basel.Dest'
             """
             lcand = rprev(basel)
-            # print(f"lcand: {lcand}")
-            if valid(lcand):
-                # print(f'Valid lcand: {lcand}, {org(lcand)},{dest(lcand)}')
-                # debug(m, edges=True, next=True)
+            if valid(lcand, basel):
                 while inCircle(
                     dest(basel), org(basel), dest(lcand), dest(onext(lcand))
                 ):
-                    # print("in loop l")
                     t = onext(lcand)
                     m.deleteEdge(lcand)
                     lcand = t
@@ -94,13 +73,10 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
              and delete R edges'
             """
             rcand = oprev(basel)
-            # print(f"rcand: {rcand}")
-            if valid(rcand):
-                # print(f'Valid rcand: {rcand}, {org(rcand)},{dest(rcand)}')
+            if valid(rcand, basel):
                 while inCircle(
                     dest(basel), org(basel), dest(rcand), dest(oprev(rcand))
                 ):
-                    # print("in loop r")
                     t = oprev(rcand)
                     m.deleteEdge(rcand)
                     rcand = t
@@ -110,11 +86,10 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
              then basel is the upper common tangent'
             """
 
-            lvalid = valid(lcand)
-            rvalid = valid(rcand)
+            lvalid = valid(lcand, basel)
+            rvalid = valid(rcand, basel)
 
             if not lvalid and not rvalid:
-                # print("Found upper common tangent!\n")
                 break
 
             """
@@ -129,18 +104,14 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
             ):
 
                 # 'Add cross edge basel from rcand.Dest to basel.Dest'
-                # print(f"connect {rcand} to {sym(basel)}")
                 basel = m.connect(rcand, sym(basel))
 
-                # debug(m)
 
             else:
 
                 # 'Add cross edge basel from basel.Org to lcand.Dest'
-                # print(f"connect {lcand} to {sym(basel)}")
                 basel = m.connect(sym(basel), sym(lcand))
 
-                # debug(m)
 
         xMin = verts[start]
         xMax = verts[end]
@@ -162,7 +133,6 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
         a = m.makeEdge(verts[start], verts[end])
 
         if start == end:
-            # print("Error: Lonely Point.")
             exit()
 
         return [a, sym(a)]

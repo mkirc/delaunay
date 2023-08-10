@@ -150,3 +150,7 @@ def inCircle(vA, vB, vC, vD):
     clift = cdx * cdx + cdy * cdy
 
     return (alift * bcdet + blift * cadet + clift * abdet) > 0
+
+def valid(e, basel):
+
+    return ccw(dest(e), dest(basel), org(basel))

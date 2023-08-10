@@ -22,7 +22,7 @@ An example usage looks like this:
 from random import seed, uniform
 from delaunay.quadedge.mesh import Mesh
 from delaunay.quadedge.point import Vertex
-from delaunay import delaunay
+from delaunay.delaunay import delaunay
 
 if __name__ == "__main__":
 
@@ -45,6 +45,20 @@ if __name__ == "__main__":
     for qe in m.quadEdges:
         if qe.org is not None:
             lines += [[[qe.org.x, qe.dest.x], [qe.org.y, qe.dest.y]]]
+
+    # plotting, for example:
+
+    # import matplotlib.pyplot as plt
+
+    # fig, ax = plt.subplots()
+
+    # for line in lines:
+    #     start, end = line
+
+    #     ax.plot(start, end)
+
+    # plt.show()
+
 ```
 
 ## How?
