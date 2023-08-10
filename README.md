@@ -4,7 +4,7 @@ This is a pure python library for finding the
 delaunay triangulation on given pointsets.
 Maybe one day voronoi tessellation will be added, since its based on
 the [quad-edge datastructure](https://en.wikipedia.org/wiki/Quad-edge),
-which makes finding the dual to each represenations
+which makes finding the dual to each representations
 easy.
 
 <img src="./images/plot.png" alt="delaunay triangulation" width="500"/>
