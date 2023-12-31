@@ -45,7 +45,7 @@ class Edge:
 
     def __repr__(self):
 
-        return 'Edge-{self.id}'
+        return f'Edge-{self.id}'
 
     def __str__(self):
 
