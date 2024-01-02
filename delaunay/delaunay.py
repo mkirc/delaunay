@@ -162,5 +162,4 @@ def delaunay(m, start, end, leftEdge=None, rightEdge=None, rows=None):
             return [a, sym(b)]
 
         else:  # points are colinear
-            m.deleteEdge(c)
             return [a, sym(b)]
