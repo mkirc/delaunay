@@ -6,13 +6,12 @@ class Polygon:
     def __init__(self, edges: list):
         self.edges = edges
 
-        # Add first vertex (origin of first edge)
-        first_parent_qe = self.edges[0].parent
-        self.vertices = [first_parent_qe.org, first_parent_qe.dest]
-        vertices_set = set(self.vertices)
+        self.vertices = []
+        # To speed up "in" tests
+        vertices_set = set()
 
-        # Add vertices from the remaining edges
-        for e in self.edges[1:]:
+        # Add vertices from the edges
+        for e in self.edges:
             qe = e.parent
             if qe.org not in vertices_set:
                 vertices_set.add(qe.org)
