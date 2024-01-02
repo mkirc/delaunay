@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="delaunay",
-    version="1.0.4",
+    version="1.0.6",
     author="mkirc",
     author_email="m.p.kirchner@gmx.de",
     description="a lightweight 2d delaunay triangulator based on algorithm by Guibas & Stolfi",
