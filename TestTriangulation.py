@@ -1,4 +1,6 @@
 import json
+import math
+from random import seed, uniform
 
 from delaunay.quadedge.mesh import Mesh
 from delaunay.quadedge.point import Vertex
@@ -7,20 +9,37 @@ from delaunay.delaunay import delaunay
 import PIL.Image
 import PIL.ImageDraw
 
-with open("test_resources/vertices-32.json", "r") as vertices_fp:
-    vertices_array = json.load(fp=vertices_fp)
+VERTICES_FILE = "test_resources/vertices-128.json"  # or None to generate random ones.
+# VERTICES_FILE = None
 
+if VERTICES_FILE is None:
+    N = 1024  # number of vertices
+    MAX_X = 1024
+    MAX_Y = 1024
+    print(f"Generating {N} random vertices...")
+    vertices_tuple = [(uniform(0, MAX_X), uniform(0, MAX_Y)) for v in range(N)]
+else:
+    print(f"Loading vertices from '{VERTICES_FILE}'...")
+    with open(VERTICES_FILE, "r") as vertices_fp:
+        vertices_tuple = json.load(fp=vertices_fp)
+
+
+# Convert into Vertex list
 vertices = []
 
 max_x = 0
 max_y = 0
-for v in vertices_array:
+for v in vertices_tuple:
     vv = Vertex(v[0], v[1])
     vertices.append(vv)
     if vv.x > max_x:
         max_x = vv.x
     if vv.y > max_y:
         max_y = vv.y
+
+# Convert to integer
+max_x = math.ceil(max_x)
+max_y = math.ceil(max_y)
 
 n_vertices = len(vertices)
 print(f"Found {n_vertices} vertices. max_x/y={max_x}/{max_y}")
@@ -37,12 +56,11 @@ print("Generating Delaunay Mesh...")
 res = delaunay(m, 0, n_vertices - 1) # computes the triangulation
 print(f"Delaunay result:", f"{res}")
 
-polygons = m.listPolygons()
-print(f"Num Polygons {len(polygons)}")
-
 
 #
 # Save debug image from Quad Edges
+print("Analyzing QuadEdges...")
+print(f"Num QuadEdges {len(m.quadEdges)}")
 img = PIL.Image.new("RGB", (img_width, img_height), (0, 0, 0))
 
 # Plot triangulation info
@@ -71,6 +89,10 @@ img.save(img_name)
 
 #
 # Save debug image from Polygons
+print("Analyzing Polygons...")
+polygons = m.listPolygons()
+print(f"Num Polygons {len(polygons)}")
+
 img = PIL.Image.new("RGB", (img_width, img_height), (0, 0, 0))
 
 # Plot polygons info
@@ -79,7 +101,7 @@ col = [0, 0, 0]  # will cycle in range 0-127
 for i, poly in enumerate(polygons):
     # print(f"{t._a}, {type(t._a)}")
     if len(poly.vertices) > 3:
-        print(f"Skipping polygon {i} with {len(poly.vertices)} vertices")
+        print(f"Skipping polygon {i} with {len(poly.vertices)} vertices.")
         continue
 
     # draw lines from vertices
