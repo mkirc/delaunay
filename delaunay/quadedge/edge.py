@@ -14,10 +14,10 @@ class QuadEdge:
         self.org = org
         self.dest = dest
 
-    def left(self):
+    def right(self):
         return self.edges[1]
 
-    def right(self):
+    def left(self):
         return self.edges[3]
 
     def __str__(self):
